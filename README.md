@@ -2,6 +2,8 @@
 
 `expo-tv-launcher` is an Expo module for Android TV / Google TV that implements a launcher owned by your app.
 
+![expo-tv-launcher demo](./videos/expo-tv-launcher-example.gif)
+
 It lets your app:
 
 - persist a target app package name,

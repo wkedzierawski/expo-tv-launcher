@@ -1,5 +1,6 @@
 example/
 ignore/
+videos/
 node_modules/
 
 android/.gradle/
