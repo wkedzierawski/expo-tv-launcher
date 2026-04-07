@@ -67,6 +67,15 @@ The plugin adds `expo.modules.tvlauncher.LauncherActivity` to the Android manife
 
 If `packageName` is omitted, the plugin falls back to `expo.android.package`.
 
+## Manual Android Setup
+
+If you are not using Expo config plugins / CNG, add the module manually:
+
+- register `expo.modules.tvlauncher.LauncherActivity` in your Android manifest
+- give it `MAIN`, `HOME` and `DEFAULT` intent categories
+- add manifest metadata `expo.modules.tvlauncher.TARGET_PACKAGE` with the only allowed target package
+- make sure your app includes the module through Expo autolinking or manual native integration
+
 ## API
 
 ```ts
@@ -136,6 +145,52 @@ The ADB-assisted flow only works when the device exposes a local ADB daemon on `
 
 If `localhost:5555` is not reachable, `enableLauncher()` / `disableLauncher()` return `false`. The module still keeps the pure Android component toggle path internally, but the APK-like stock-launcher switching depends on ADB.
 
+## Uninstall And Recovery
+
+The safe path is:
+
+- call `disableLauncher()` first
+- verify that the stock launcher is back
+- only then uninstall your app
+
+If the app is uninstalled while it is still acting as HOME, the result depends on the device and OEM build.
+
+Inference from the current implementation:
+
+- `enableLauncher()` disables known stock launchers with `pm disable-user --user 0 ...`
+- it then assigns HOME to your app with `cmd package set-home-activity <your.package>`
+- if you uninstall your app without calling `disableLauncher()` first, your HOME app may disappear while the stock launchers are still disabled
+- on some devices Android will fall back to another available HOME app or show the launcher picker
+- on other devices you may end up with no usable HOME screen until you recover through external ADB
+
+If that happens, reconnect over external ADB from your computer and re-enable the stock launchers:
+
+```bash
+adb shell pm enable com.google.android.tvlauncher
+adb shell pm enable com.google.android.apps.tv.launcherx
+adb shell pm enable com.google.android.tungsten.setupwraith
+```
+
+Then set HOME back to a stock launcher that exists on the device:
+
+```bash
+adb shell cmd package set-home-activity com.google.android.tvlauncher
+```
+
+On some Google TV devices the correct package is instead:
+
+```bash
+adb shell cmd package set-home-activity com.google.android.apps.tv.launcherx
+```
+
+If you are not sure which launcher is present, check first:
+
+```bash
+adb shell pm list packages | grep -E 'tvlauncher|launcherx|setupwraith'
+```
+
+If the device is already in a bad state and you have no working external ADB access, recovery may require opening system settings another way or, in the worst case, a factory reset.
+
 ## Platform Support
 
 - Android: real implementation
@@ -157,3 +212,11 @@ The `example` app is configured for the React Native TV fork, not stock React Na
 - The user may still need to select your app as the HOME app in system UI.
 - Some OEM builds may ignore or constrain HOME behavior.
 - Without working local ADB or elevated privileges, full launcher replacement is not guaranteed.
+
+## Disclaimer
+
+This package is provided `as is`.
+
+- You use it at your own risk.
+- I am not responsible for any damage, misconfiguration, soft-brick, loss of launcher access, device instability, data loss, or other issues caused by using this package.
+- This applies especially to ADB-assisted flows, HOME reassignment, stock launcher disabling, and uninstalling the host app while it is still configured as the active launcher.

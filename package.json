@@ -1,6 +1,6 @@
 {
   "name": "expo-tv-launcher",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Expo module providing an Android TV launcher that works as a HOME redirector",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -13,6 +13,16 @@
       "default": "./build/index.js"
     }
   },
+  "files": [
+    "android/build.gradle",
+    "android/src",
+    "build",
+    "ios/ExpoTvLauncher.podspec",
+    "src",
+    "app.plugin.js",
+    "expo-module.config.json",
+    "README.md"
+  ],
   "scripts": {
     "build": "expo-module build",
     "clean": "expo-module clean",
@@ -34,24 +44,36 @@
     "launcher",
     "home-redirector"
   ],
-  "repository": "https://github.com/wkedzierawski/expo-tv-launcher",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wkedzierawski/expo-tv-launcher.git"
+  },
   "bugs": {
     "url": "https://github.com/wkedzierawski/expo-tv-launcher/issues"
   },
   "author": "Wiktor <wiktorkedzierawski@gmail.com> (https://github.com/wkedzierawski)",
   "license": "MIT",
   "homepage": "https://github.com/wkedzierawski/expo-tv-launcher#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/react": "~19.1.1",
-    "expo-module-scripts": "^55.0.2",
     "expo": "^55.0.11",
-    "react-native": "0.82.1"
+    "expo-module-scripts": "^55.0.2",
+    "react-native": "0.82.1",
+    "typescript": "~5.9.2"
   },
   "peerDependencies": {
     "expo": "*",
     "react": "*",
     "react-native": "*"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "directories": {
+    "example": "example"
+  },
+  "type": "commonjs"
 }
