@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-tv-launcher": ["../src/index"],
+      "expo-tv-launcher/*": ["../src/*"]
+    }
+  }
+}
