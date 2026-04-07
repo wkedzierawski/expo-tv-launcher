@@ -30,6 +30,7 @@ const config: ExpoConfig = {
     favicon: './assets/favicon.png',
   },
   plugins: [
+    ['@react-native-tvos/config-tv', { isTV: true }],
     ['../app.plugin.js', { packageName: 'expo.modules.tvlauncher.example' }],
   ],
 };

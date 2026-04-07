@@ -142,6 +142,15 @@ If `localhost:5555` is not reachable, `enableLauncher()` / `disableLauncher()` r
 - iOS: JS mock, no native Swift implementation
 - Web: JS mock only
 
+## Example App
+
+The `example` app is configured for the React Native TV fork, not stock React Native.
+
+- `example/package.json` uses `react-native: npm:react-native-tvos@0.81-stable`
+- `example/app.config.ts` enables `@react-native-tvos/config-tv` with `isTV: true`
+- Android TV build is verified in this repo with Gradle
+- Apple TV native generation is verified with `expo prebuild`; compiling on macOS additionally requires the matching tvOS platform to be installed in Xcode
+
 ## Limitations
 
 - This launcher works as a HOME redirector. Your app becomes the HOME handler, not the target app.
