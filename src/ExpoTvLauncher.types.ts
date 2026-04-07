@@ -1,19 +1,21 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+export type TargetPackage = string | null;
 
-export type OnLoadEventPayload = {
-  url: string;
+export type LauncherStatus = {
+  targetPackage: TargetPackage;
+  launcherEnabled: boolean;
+  currentHomePackage: string | null;
+  targetLaunchable: boolean;
 };
 
-export type ExpoTvLauncherModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
-};
-
-export type ChangeEventPayload = {
-  value: string;
-};
-
-export type ExpoTvLauncherViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
+export type ExpoTvLauncherModuleType = {
+  setTargetPackage(packageName: TargetPackage): void;
+  getTargetPackage(): TargetPackage;
+  isLauncherEnabled(): boolean;
+  enableLauncher(): Promise<boolean>;
+  disableLauncher(): Promise<boolean>;
+  getCurrentHomePackage(): string | null;
+  launchTargetApp(): boolean;
+  openTargetApp(packageName: string): boolean;
+  openHomeSettings(): boolean;
+  getStatus(): LauncherStatus;
 };

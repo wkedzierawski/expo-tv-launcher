@@ -1,9 +1,18 @@
 {
   "name": "expo-tv-launcher",
   "version": "0.1.0",
-  "description": "My new module",
+  "description": "Expo module providing an Android TV launcher that works as a HOME redirector",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "exports": {
+    "./app.plugin": "./app.plugin.js",
+    "./app.plugin.js": "./app.plugin.js",
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    }
+  },
   "scripts": {
     "build": "expo-module build",
     "clean": "expo-module clean",
@@ -19,7 +28,11 @@
     "react-native",
     "expo",
     "expo-tv-launcher",
-    "ExpoTvLauncher"
+    "ExpoTvLauncher",
+    "android-tv",
+    "google-tv",
+    "launcher",
+    "home-redirector"
   ],
   "repository": "https://github.com/wkedzierawski/expo-tv-launcher",
   "bugs": {

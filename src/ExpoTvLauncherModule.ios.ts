@@ -1,10 +1,6 @@
-import type {
-  ExpoTvLauncherModuleType,
-  LauncherStatus,
-  TargetPackage,
-} from './ExpoTvLauncher.types';
+import type { ExpoTvLauncherModuleType, LauncherStatus, TargetPackage } from './ExpoTvLauncher.types';
 
-class ExpoTvLauncherWebMock implements ExpoTvLauncherModuleType {
+class ExpoTvLauncherIosMock implements ExpoTvLauncherModuleType {
   private targetPackage: TargetPackage = null;
 
   setTargetPackage(packageName: TargetPackage): void {
@@ -53,4 +49,4 @@ class ExpoTvLauncherWebMock implements ExpoTvLauncherModuleType {
   }
 }
 
-export default new ExpoTvLauncherWebMock();
+export default new ExpoTvLauncherIosMock();

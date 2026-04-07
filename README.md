@@ -1,0 +1,150 @@
+# expo-tv-launcher
+
+`expo-tv-launcher` is an Expo module for Android TV / Google TV that implements a launcher owned by your app.
+
+It lets your app:
+
+- persist a target app package name,
+- enable or disable a HOME handler component,
+- launch the saved target app on demand,
+- redirect HOME presses to the saved target app when your component is selected as HOME,
+- optionally use local ADB on `localhost:5555` to disable stock launchers and set your app as HOME, mirroring the behavior of the analyzed APK.
+
+It does not make the target app a real system launcher.
+
+## What It Is
+
+This module provides:
+
+- a Kotlin Expo Module for Android,
+- a `LauncherActivity` that can act as a HOME handler,
+- `SharedPreferences` storage for the selected target package,
+- a config plugin that injects the HOME activity into the Android manifest during `expo prebuild`,
+- a JS mock for iOS,
+- a JS mock for web.
+
+## What It Is Not
+
+This module does not:
+
+- ship with privileged permissions,
+- require root,
+- guarantee replacement of the OEM launcher,
+- turn an arbitrary third-party app into the true system launcher.
+
+It can use ADB shell commands when local ADB over TCP is available, but the mechanism still belongs to your app, not the redirected target app.
+
+Behavior depends on Android TV / Google TV version, OEM policy, whether `adbd` is reachable on `localhost:5555`, and whether the device authorizes the generated ADB key.
+
+## Installation
+
+```bash
+npm install expo-tv-launcher
+```
+
+## Config Plugin
+
+Add the plugin in your `app.config.ts`:
+
+```ts
+import { ExpoConfig } from 'expo/config';
+
+const config: ExpoConfig = {
+  plugins: [
+    [
+      'expo-tv-launcher',
+      {
+        packageName: 'com.example.my-tv-app',
+      },
+    ],
+  ],
+};
+
+export default config;
+```
+
+The plugin adds `expo.modules.tvlauncher.LauncherActivity` to the Android manifest with a HOME intent filter and stores the configured package name in manifest metadata.
+
+If `packageName` is omitted, the plugin falls back to `expo.android.package`.
+
+## API
+
+```ts
+setTargetPackage(packageName: string | null): void
+getTargetPackage(): string | null
+isLauncherEnabled(): boolean
+enableLauncher(): Promise<boolean>
+disableLauncher(): Promise<boolean>
+getCurrentHomePackage(): string | null
+launchTargetApp(): boolean
+openTargetApp(packageName: string): boolean
+openHomeSettings(): boolean
+getStatus(): {
+  targetPackage: string | null
+  launcherEnabled: boolean
+  currentHomePackage: string | null
+  targetLaunchable: boolean
+}
+```
+
+## Usage
+
+```ts
+import ExpoTvLauncher from 'expo-tv-launcher';
+
+ExpoTvLauncher.setTargetPackage('com.example.my-tv-app');
+const enabled = await ExpoTvLauncher.enableLauncher();
+
+const status = ExpoTvLauncher.getStatus();
+const launched = ExpoTvLauncher.launchTargetApp();
+```
+
+## Hook
+
+```ts
+import { useLauncher } from 'expo-tv-launcher';
+
+const {
+  status,
+  setTargetPackage,
+  enableLauncher,
+  disableLauncher,
+  launchTargetApp,
+  openHomeSettings,
+  refresh,
+} = useLauncher();
+```
+
+## Android Notes
+
+- Target app launch uses `getLeanbackLaunchIntentForPackage` first.
+- If that fails, it falls back to `getLaunchIntentForPackage`.
+- If no target package is saved, the HOME redirector falls back to launching the host app, matching the behavior observed in the APK.
+- If no target app is saved or launch is impossible, the HOME redirector finishes without crashing.
+- The HOME component is toggled with `PackageManager.setComponentEnabledSetting(...)`.
+- `enableLauncher()` enables the HOME component, tries to disable known stock launchers via ADB, and runs `cmd package set-home-activity <your.package>`.
+- `disableLauncher()` re-enables known stock launchers via ADB and only then disables the HOME component.
+- The package passed in the Expo config plugin is treated as the only allowed target package. `setTargetPackage()` and `openTargetApp()` cannot switch to a different package at runtime.
+- Known stock launcher packages handled by the module:
+- `com.google.android.tvlauncher`
+- `com.google.android.apps.tv.launcherx`
+- `com.google.android.tungsten.setupwraith`
+
+## ADB Requirement
+
+The ADB-assisted flow only works when the device exposes a local ADB daemon on `localhost:5555` and accepts the app-generated RSA key.
+
+If `localhost:5555` is not reachable, `enableLauncher()` / `disableLauncher()` return `false`. The module still keeps the pure Android component toggle path internally, but the APK-like stock-launcher switching depends on ADB.
+
+## Platform Support
+
+- Android: real implementation
+- iOS: JS mock, no native Swift implementation
+- Web: JS mock only
+
+## Limitations
+
+- This launcher works as a HOME redirector. Your app becomes the HOME handler, not the target app.
+- The user may still need to select your app as the HOME app in system UI.
+- Some OEM builds may ignore or constrain HOME behavior.
+- Without working local ADB or elevated privileges, full launcher replacement is not guaranteed.
