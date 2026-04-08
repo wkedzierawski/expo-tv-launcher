@@ -51,14 +51,14 @@ npm install expo-tv-launcher
 Add the plugin in your `app.config.ts`:
 
 ```ts
-import { ExpoConfig } from 'expo/config';
+import { ExpoConfig } from "expo/config";
 
 const config: ExpoConfig = {
   plugins: [
     [
-      'expo-tv-launcher',
+      "expo-tv-launcher",
       {
-        packageName: 'com.example.my-tv-app',
+        packageName: "com.example.my-tv-app",
       },
     ],
   ],
@@ -103,9 +103,9 @@ getStatus(): {
 ## Usage
 
 ```ts
-import ExpoTvLauncher from 'expo-tv-launcher';
+import ExpoTvLauncher from "expo-tv-launcher";
 
-ExpoTvLauncher.setTargetPackage('com.example.my-tv-app');
+ExpoTvLauncher.setTargetPackage("com.example.my-tv-app");
 const enabled = await ExpoTvLauncher.enableLauncher();
 
 const status = ExpoTvLauncher.getStatus();
@@ -115,7 +115,7 @@ const launched = ExpoTvLauncher.launchTargetApp();
 ## Hook
 
 ```ts
-import { useLauncher } from 'expo-tv-launcher';
+import { useLauncher } from "expo-tv-launcher";
 
 const {
   status,

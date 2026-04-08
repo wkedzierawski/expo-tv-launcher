@@ -1,5 +1,5 @@
-import { requireNativeModule } from 'expo';
+import { requireNativeModule } from "expo";
 
-import type { ExpoTvLauncherModuleType } from './ExpoTvLauncher.types';
+import type { ExpoTvLauncherModuleType } from "./ExpoTvLauncher.types";
 
-export default requireNativeModule<ExpoTvLauncherModuleType>('ExpoTvLauncher');
+export default requireNativeModule<ExpoTvLauncherModuleType>("ExpoTvLauncher");

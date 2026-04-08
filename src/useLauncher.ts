@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-import ExpoTvLauncher from './ExpoTvLauncherModule';
-import type { LauncherStatus, TargetPackage } from './ExpoTvLauncher.types';
+import type { LauncherStatus, TargetPackage } from "./ExpoTvLauncher.types";
+import ExpoTvLauncher from "./ExpoTvLauncherModule";
 
 function readStatus(): LauncherStatus {
   return ExpoTvLauncher.getStatus();
@@ -10,50 +10,56 @@ function readStatus(): LauncherStatus {
 export function useLauncher() {
   const [status, setStatus] = useState<LauncherStatus>(() => readStatus());
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     const nextStatus = readStatus();
     setStatus(nextStatus);
     return nextStatus;
-  };
+  }, []);
 
-  const setTargetPackage = (packageName: TargetPackage) => {
-    ExpoTvLauncher.setTargetPackage(packageName);
-    return refresh();
-  };
+  const setTargetPackage = useCallback(
+    (packageName: TargetPackage) => {
+      ExpoTvLauncher.setTargetPackage(packageName);
+      return refresh();
+    },
+    [refresh],
+  );
 
-  const enableLauncher = async () => {
+  const enableLauncher = useCallback(async () => {
     const enabled = await ExpoTvLauncher.enableLauncher();
     refresh();
     return enabled;
-  };
+  }, [refresh]);
 
-  const disableLauncher = async () => {
+  const disableLauncher = useCallback(async () => {
     const disabled = await ExpoTvLauncher.disableLauncher();
     refresh();
     return disabled;
-  };
+  }, [refresh]);
 
-  const launchTargetApp = () => {
+  const launchTargetApp = useCallback(() => {
     const launched = ExpoTvLauncher.launchTargetApp();
     refresh();
     return launched;
-  };
+  }, [refresh]);
 
-  const openTargetApp = (packageName: string) => {
-    const launched = ExpoTvLauncher.openTargetApp(packageName);
-    refresh();
-    return launched;
-  };
+  const openTargetApp = useCallback(
+    (packageName: string) => {
+      const launched = ExpoTvLauncher.openTargetApp(packageName);
+      refresh();
+      return launched;
+    },
+    [refresh],
+  );
 
-  const openHomeSettings = () => {
+  const openHomeSettings = useCallback(() => {
     const opened = ExpoTvLauncher.openHomeSettings();
     refresh();
     return opened;
-  };
+  }, [refresh]);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   return {
     status,

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import ExpoTvLauncher, { useLauncher } from 'expo-tv-launcher';
+import ExpoTvLauncher, { useLauncher } from "expo-tv-launcher";
+import { useState } from "react";
 import {
   Button,
   SafeAreaView,
@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
+} from "react-native";
 
 export default function App() {
   const {
@@ -24,7 +24,7 @@ export default function App() {
     targetLaunchable,
     targetPackage,
   } = useLauncher();
-  const [draftPackage, setDraftPackage] = useState(targetPackage ?? '');
+  const [draftPackage, setDraftPackage] = useState(targetPackage ?? "");
   const copy = messages.en;
 
   return (
@@ -50,7 +50,7 @@ export default function App() {
           <Button
             title={copy.clearTarget}
             onPress={() => {
-              setDraftPackage('');
+              setDraftPackage("");
               setTargetPackage(null);
             }}
           />
@@ -73,7 +73,10 @@ export default function App() {
           <View style={styles.spacer} />
           <Button title={copy.launchTarget} onPress={launchTargetApp} />
           <View style={styles.spacer} />
-          <Button title={copy.launchSpecific} onPress={() => ExpoTvLauncher.openTargetApp(draftPackage)} />
+          <Button
+            title={copy.launchSpecific}
+            onPress={() => ExpoTvLauncher.openTargetApp(draftPackage)}
+          />
           <View style={styles.spacer} />
           <Button title={copy.openHomeSettings} onPress={openHomeSettings} />
           <View style={styles.spacer} />
@@ -81,11 +84,26 @@ export default function App() {
         </Group>
 
         <Group name={copy.statusSection}>
-          <StatusRow label={copy.savedTarget} value={targetPackage ?? copy.none} />
-          <StatusRow label={copy.launcherEnabledLabel} value={String(launcherEnabled)} />
-          <StatusRow label={copy.currentHomePackageLabel} value={currentHomePackage ?? copy.none} />
-          <StatusRow label={copy.targetLaunchableLabel} value={String(targetLaunchable)} />
-          <StatusRow label={copy.statusSnapshotLabel} value={JSON.stringify(status)} />
+          <StatusRow
+            label={copy.savedTarget}
+            value={targetPackage ?? copy.none}
+          />
+          <StatusRow
+            label={copy.launcherEnabledLabel}
+            value={String(launcherEnabled)}
+          />
+          <StatusRow
+            label={copy.currentHomePackageLabel}
+            value={currentHomePackage ?? copy.none}
+          />
+          <StatusRow
+            label={copy.targetLaunchableLabel}
+            value={String(targetLaunchable)}
+          />
+          <StatusRow
+            label={copy.statusSnapshotLabel}
+            value={JSON.stringify(status)}
+          />
         </Group>
       </ScrollView>
     </SafeAreaView>
@@ -112,25 +130,25 @@ function Group(props: { name: string; children: React.ReactNode }) {
 
 const messages = {
   en: {
-    title: 'Launcher Demo',
-    targetSection: 'Target app',
-    actionsSection: 'Actions',
-    statusSection: 'Status',
-    packagePlaceholder: 'com.example.tvapp',
-    saveTarget: 'Save target package',
-    clearTarget: 'Clear target package',
-    enableLauncher: 'Enable launcher',
-    disableLauncher: 'Disable launcher',
-    launchTarget: 'Launch saved target',
-    launchSpecific: 'Launch typed package',
-    openHomeSettings: 'Open Home settings',
-    refreshStatus: 'Refresh status',
-    savedTarget: 'Saved target',
-    launcherEnabledLabel: 'Launcher enabled',
-    currentHomePackageLabel: 'Current HOME package',
-    targetLaunchableLabel: 'Target launchable',
-    statusSnapshotLabel: 'Status snapshot',
-    none: 'none',
+    title: "Launcher Demo",
+    targetSection: "Target app",
+    actionsSection: "Actions",
+    statusSection: "Status",
+    packagePlaceholder: "com.example.tvapp",
+    saveTarget: "Save target package",
+    clearTarget: "Clear target package",
+    enableLauncher: "Enable launcher",
+    disableLauncher: "Disable launcher",
+    launchTarget: "Launch saved target",
+    launchSpecific: "Launch typed package",
+    openHomeSettings: "Open Home settings",
+    refreshStatus: "Refresh status",
+    savedTarget: "Saved target",
+    launcherEnabledLabel: "Launcher enabled",
+    currentHomePackageLabel: "Current HOME package",
+    targetLaunchableLabel: "Target launchable",
+    statusSnapshotLabel: "Status snapshot",
+    none: "none",
   },
 } as const;
 
@@ -145,16 +163,16 @@ const styles = StyleSheet.create({
   },
   group: {
     margin: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
   },
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
   },
   input: {
-    borderColor: '#bbb',
+    borderColor: "#bbb",
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 12,
@@ -168,11 +186,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   label: {
-    color: '#555',
+    color: "#555",
     marginBottom: 4,
   },
   value: {
-    color: '#111',
+    color: "#111",
     fontSize: 15,
   },
 });

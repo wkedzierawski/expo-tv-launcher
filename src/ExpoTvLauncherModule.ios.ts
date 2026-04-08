@@ -1,10 +1,17 @@
-import type { ExpoTvLauncherModuleType, LauncherStatus, TargetPackage } from './ExpoTvLauncher.types';
+import type {
+  ExpoTvLauncherModuleType,
+  LauncherStatus,
+  TargetPackage,
+} from "./ExpoTvLauncher.types";
 
 class ExpoTvLauncherIosMock implements ExpoTvLauncherModuleType {
   private targetPackage: TargetPackage = null;
 
   setTargetPackage(packageName: TargetPackage): void {
-    this.targetPackage = typeof packageName === 'string' && packageName.length > 0 ? packageName : null;
+    this.targetPackage =
+      typeof packageName === "string" && packageName.length > 0
+        ? packageName
+        : null;
   }
 
   getTargetPackage(): TargetPackage {

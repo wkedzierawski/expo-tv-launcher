@@ -1,20 +1,33 @@
-const { createRunOncePlugin, withAndroidManifest } = require('expo/config-plugins');
+const {
+  createRunOncePlugin,
+  withAndroidManifest,
+} = require("expo/config-plugins");
 
-const pkg = require('./package.json');
+const pkg = require("./package.json");
 
-const LAUNCHER_ACTIVITY = 'expo.modules.tvlauncher.LauncherActivity';
-const TARGET_PACKAGE_META_DATA = 'expo.modules.tvlauncher.TARGET_PACKAGE';
+const LAUNCHER_ACTIVITY = "expo.modules.tvlauncher.LauncherActivity";
+const TARGET_PACKAGE_META_DATA = "expo.modules.tvlauncher.TARGET_PACKAGE";
 
 function getConfiguredTargetPackage(config, props) {
-  if (props && typeof props === 'object' && typeof props.packageName === 'string' && props.packageName.length > 0) {
+  if (
+    props &&
+    typeof props === "object" &&
+    typeof props.packageName === "string" &&
+    props.packageName.length > 0
+  ) {
     return props.packageName;
   }
 
-  if (typeof config.android?.package === 'string' && config.android.package.length > 0) {
+  if (
+    typeof config.android?.package === "string" &&
+    config.android.package.length > 0
+  ) {
     return config.android.package;
   }
 
-  throw new Error('expo-tv-launcher requires a packageName option or expo.android.package in app config.');
+  throw new Error(
+    "expo-tv-launcher requires a packageName option or expo.android.package in app config.",
+  );
 }
 
 function ensureArray(value) {
@@ -26,19 +39,19 @@ function createHomeIntentFilter() {
     action: [
       {
         $: {
-          'android:name': 'android.intent.action.MAIN',
+          "android:name": "android.intent.action.MAIN",
         },
       },
     ],
     category: [
       {
         $: {
-          'android:name': 'android.intent.category.HOME',
+          "android:name": "android.intent.category.HOME",
         },
       },
       {
         $: {
-          'android:name': 'android.intent.category.DEFAULT',
+          "android:name": "android.intent.category.DEFAULT",
         },
       },
     ],
@@ -57,28 +70,28 @@ const withExpoTvLauncher = (config, props = {}) => {
 
     const existingActivities = ensureArray(application.activity);
     const existingIndex = existingActivities.findIndex(
-      (activity) => activity?.$?.['android:name'] === LAUNCHER_ACTIVITY
+      (activity) => activity?.$?.["android:name"] === LAUNCHER_ACTIVITY,
     );
-    const existingMetaData = ensureArray(application['meta-data']);
+    const existingMetaData = ensureArray(application["meta-data"]);
     const metaDataIndex = existingMetaData.findIndex(
-      (entry) => entry?.$?.['android:name'] === TARGET_PACKAGE_META_DATA
+      (entry) => entry?.$?.["android:name"] === TARGET_PACKAGE_META_DATA,
     );
 
     const launcherActivity = {
       $: {
-        'android:name': LAUNCHER_ACTIVITY,
-        'android:enabled': 'false',
-        'android:excludeFromRecents': 'true',
-        'android:exported': 'true',
-        'android:launchMode': 'singleTask',
-        'android:theme': '@android:style/Theme.NoDisplay',
+        "android:name": LAUNCHER_ACTIVITY,
+        "android:enabled": "false",
+        "android:excludeFromRecents": "true",
+        "android:exported": "true",
+        "android:launchMode": "singleTask",
+        "android:theme": "@android:style/Theme.NoDisplay",
       },
-      'intent-filter': [createHomeIntentFilter()],
+      "intent-filter": [createHomeIntentFilter()],
     };
     const targetPackageMetaData = {
       $: {
-        'android:name': TARGET_PACKAGE_META_DATA,
-        'android:value': targetPackage,
+        "android:name": TARGET_PACKAGE_META_DATA,
+        "android:value": targetPackage,
       },
     };
 
@@ -95,7 +108,7 @@ const withExpoTvLauncher = (config, props = {}) => {
     }
 
     application.activity = existingActivities;
-    application['meta-data'] = existingMetaData;
+    application["meta-data"] = existingMetaData;
     return config;
   });
 };
